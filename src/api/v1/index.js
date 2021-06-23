@@ -4,8 +4,9 @@ const router = new Router({
     prefix: '/v1'
 })
 
-router.get('/', async (ctx) => {
-    
+router.get('/java', async (ctx) => {
+    let r = await fetch(ctx.query.ip, ~~ctx.query.port)
+    ctx.body = r
 })
 
 module.exports = router
