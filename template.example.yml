@@ -1,0 +1,32 @@
+ROSTemplateFormatVersion: "2015-09-01"
+Transform: "Aliyun::Serverless-2018-04-03"
+Resources:
+  minecraft-server-motd:
+    Type: "Aliyun::Serverless::Service"
+    Properties:
+      Description: Minecraft Server Motd API
+    minecraft-server-motd:
+      Type: "Aliyun::Serverless::Function"
+      Properties:
+        Handler: index.handler
+        Runtime: custom
+        Timeout: 60
+        MemorySize: 256
+        InstanceConcurrency: 50
+        CodeUri: ./
+      Events:
+        httpTrigger:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ["GET"]
+  Domain:
+    Type: Aliyun::Serverless::CustomDomain
+    Properties:
+      DomainName: # Modify Here
+      Protocol: HTTP
+      RouteConfig:
+        Routes:
+          "/*":
+            ServiceName: minecraft-server-motd
+            FunctionName: minecraft-server-motd
