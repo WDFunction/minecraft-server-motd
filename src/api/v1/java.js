@@ -44,7 +44,7 @@ function create_packet(packetId, data) {
 }
 
 async function fetch(host, port) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const client = new net.Socket();
     client.setNoDelay(true)
     client.connect({
@@ -53,6 +53,9 @@ async function fetch(host, port) {
     })
     client.setTimeout(10000)
     let buf = Buffer.alloc(0)
+    client.on('error', (err) => {
+      return reject(err)
+    })
     client.on('connect', () => {
       let portBuf = Buffer.from([port >> 8, port & 0xFF]) // ushort
       let buf = create_packet(0x00, Buffer.concat([

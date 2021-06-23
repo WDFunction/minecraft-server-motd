@@ -9,4 +9,4 @@ app.use(require('./api/v1').routes())
 
 const server = app.listen(9000)
 server.keepAliveTimeout = 0
-server.requestTimeout = 0
+server.timeout = 0

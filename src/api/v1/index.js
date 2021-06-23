@@ -9,7 +9,8 @@ const router = new Router({
 })
 
 router.get('/java', async (ctx) => {
-  let host = ctx.query.host
+  let host = ctx.query.host || ctx.query.ip
+  let port = ~~ctx.query.port
   if (!isIp(host)) {
     let srvIp = host.startsWith("_minecraft._tcp.") ? host : '_minecraft._tcp.' + host
     let srv = await resolver.resolveSrv(srvIp).catch(err => { })
@@ -19,7 +20,7 @@ router.get('/java', async (ctx) => {
     }
   }
   try {
-    let r = await fetch(host, ~~ctx.query.port)
+    let r = await fetch(host, port)
     ctx.body = r
   } catch (e) {
     ctx.status = 403
