@@ -43,21 +43,22 @@ function create_packet(packetId, data) {
   return Buffer.concat([Buffer.from(varint.encode(data.length + pid.length)), pid, data])
 }
 
-async function fetch(ip, port) {
+async function fetch(host, port) {
   return new Promise((resolve) => {
     const client = new net.Socket();
     client.setNoDelay(true)
     client.connect({
-      host: ip,
+      host,
       port
     })
+    client.setTimeout(10000)
     let buf = Buffer.alloc(0)
     client.on('connect', () => {
       let portBuf = Buffer.from([port >> 8, port & 0xFF]) // ushort
       let buf = create_packet(0x00, Buffer.concat([
         Buffer.from(varint.encode(-1)),
-        Buffer.from(varint.encode(ip.length)),
-        Buffer.from(ip, 'utf-8'),
+        Buffer.from(varint.encode(host.length)),
+        Buffer.from(host, 'utf-8'),
         portBuf,
         Buffer.from(varint.encode(1))
       ]))
@@ -86,10 +87,6 @@ async function fetch(ip, port) {
   })
 }
 
-async function checkSrv(host) {
-
-}
-
 module.exports = {
-  fetch, checkSrv
+  fetch
 }
