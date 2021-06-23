@@ -5,7 +5,7 @@
   "author": "LittleC <i@ltlec.cn>",
   "license": "MIT",
   "scripts": {
-    "deploy": "ncc build src/index.js -m && fun deploy -y",
+    "deploy": "ncc build src/index.js -m --v8-cache && fun deploy -y",
     "dev": "nodemon src/index.js"
   },
   "devDependencies": {
