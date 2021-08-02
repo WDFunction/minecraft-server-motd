@@ -3,7 +3,9 @@ const Router = require('koa-router')
 
 const app = new Koa();
 const router = new Router();
+const cors = require('@koa/cors');
 
+app.use(cors())
 app.use(router.routes()).use(router.allowedMethods())
 app.use(require('./api/v1').routes())
 
